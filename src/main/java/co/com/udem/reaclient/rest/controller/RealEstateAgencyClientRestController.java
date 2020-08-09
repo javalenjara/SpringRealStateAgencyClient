@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import co.com.udem.reaclient.domain.AutenticationRequestDTO;
+import co.com.udem.reaclient.entities.UserToken;
+import co.com.udem.reaclient.repositories.UserTokenRepository;
 
 @RestController
 public class RealEstateAgencyClientRestController {
@@ -14,11 +16,11 @@ public class RealEstateAgencyClientRestController {
 	@Autowired
     RestTemplate restTemplate;
    
-//    @Autowired
-//    UserTokenRepository userTokenRepository;
-//   
-//    @Autowired
-//    UserToken userToken;
+    @Autowired
+    UserTokenRepository userTokenRepository;
+   
+    @Autowired
+    UserToken userToken;
 //    
 //    @Autowired
 //    private LoadBalancerClient loadBalancer;
@@ -36,8 +38,8 @@ public class RealEstateAgencyClientRestController {
 //    	userToken.setUsername(autenticationResponseDTO.getUsername());
 //    	userToken.setToken(autenticationResponseDTO.getToken());
 //    	userTokenRepository.save(userToken);
-//    	return autenticationResponseDTO.getToken();
-//    }
+    	return null;//autenticationResponseDTO.getToken();
+    }
 //   
 //    @GetMapping("/consultarClubes")
 //    public List<ClubFutbolDTO> consultarClubFutbol() {
@@ -57,6 +59,6 @@ public class RealEstateAgencyClientRestController {
 //            e.printStackTrace();
 //        }
 //        return clubes;
-    }
+//    }
 
 }
