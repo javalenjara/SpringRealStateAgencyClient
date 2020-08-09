@@ -1,12 +1,18 @@
 package co.com.udem.reaclient.rest.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.google.gson.Gson;
+
 import co.com.udem.reaclient.domain.AutenticationRequestDTO;
+import co.com.udem.reaclient.domain.AutenticationResponseDTO;
 import co.com.udem.reaclient.entities.UserToken;
 import co.com.udem.reaclient.repositories.UserTokenRepository;
 
@@ -21,24 +27,24 @@ public class RealEstateAgencyClientRestController {
    
     @Autowired
     UserToken userToken;
-//    
-//    @Autowired
-//    private LoadBalancerClient loadBalancer;
+    
+    @Autowired
+    private LoadBalancerClient loadBalancer;
    
-    @PostMapping("/autenticar")
+    @PostMapping("/authenticate")
     public String autenticar(@RequestBody AutenticationRequestDTO autenticationRequestDTO) {
-//    	ServiceInstance serviceInstance=loadBalancer.choose("clubfutbol");
-//    	System.out.println(serviceInstance.getUri());
-//    	String baseUrl=serviceInstance.getUri().toString();
-//    	baseUrl=baseUrl+"/auth/signin";
-//    	ResponseEntity<String> postResponse = restTemplate.postForEntity(baseUrl, autenticationRequestDTO, String.class);
-//    	System.out.println("Respuesta: "+postResponse.getBody());
-//    	Gson g = new Gson();
-//    	AutenticationResponseDTO autenticationResponseDTO = g.fromJson(postResponse.getBody(), AutenticationResponseDTO.class);
-//    	userToken.setUsername(autenticationResponseDTO.getUsername());
-//    	userToken.setToken(autenticationResponseDTO.getToken());
-//    	userTokenRepository.save(userToken);
-    	return null;//autenticationResponseDTO.getToken();
+    	ServiceInstance serviceInstance = loadBalancer.choose("rea");
+    	System.out.println(serviceInstance.getUri());
+    	String baseUrl = serviceInstance.getUri().toString();
+    	baseUrl = baseUrl + "/auth/signin";
+    	ResponseEntity<String> postResponse = restTemplate.postForEntity(baseUrl, autenticationRequestDTO, String.class);
+    	System.out.println("Respuesta: " + postResponse.getBody());
+    	Gson gson = new Gson();
+    	AutenticationResponseDTO autenticationResponseDTO = gson.fromJson(postResponse.getBody(), AutenticationResponseDTO.class);
+    	userToken.setUsername(autenticationResponseDTO.getUsername());
+    	userToken.setToken(autenticationResponseDTO.getToken());
+    	userTokenRepository.save(userToken);
+    	return autenticationResponseDTO.getToken();
     }
 //   
 //    @GetMapping("/consultarClubes")
